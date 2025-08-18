@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/icons/box-seam.svg" type="image/svg+xml">
+<meta name="description" content="Boxable AI — robots that pack, lift & move.">
+<meta property="og:image" content="assets/img/inventory.png">
+  <title>Boxable AI</title>
+
+  <!-- Use either the correct integrity hash or remove integrity/crossorigin -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+
+    body {
+      background: linear-gradient(45deg, #ffffff, #c4c3c3, #c7c6c6, #ffffff);
+      background-size: 400% 400%;
+      animation: gradientAnimation 20s ease infinite;
+    }
+
+    @keyframes gradientAnimation {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+      }
+
+.navbar {
+  background-color: rgba(255, 255, 255, 0.9) !important; /* slightly transparent white */
+  backdrop-filter: blur(6px);  /* glassy effect */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+              0 0 30px rgba(255, 255, 255, 0.6),
+              0 0 45px rgba(255, 255, 255, 0.4);
+  border-radius: 0 0 10px 10px; /* smooth rounded bottom corners */
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.navbar:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 1),
+              0 0 40px rgba(255, 255, 255, 0.8),
+              0 0 60px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes glowPulse {
+  0%   { box-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.6); }
+  50%  { box-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,255,255,0.9); }
+  100% { box-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.6); }
+}
+
+
+
+
+.navbar-brand {
+  font-weight: 700;           /* make text bolder */
+  font-size: 1.4rem;          /* a touch larger */
+  letter-spacing: 0.5px;      /* subtle spacing for elegance */
+  color: #000 !important;     /* keep text dark for contrast */
+}
+
+.navbar-brand img {
+  filter: invert(53%) sepia(98%) saturate(749%) hue-rotate(1deg) brightness(103%) contrast(101%);
+  /* converts SVG fill to Bootstrap warning color */
+  margin-right: 6px; /* little breathing room before text */
+}
+
+
+
+.navbar .form-control {
+  background-color: rgba(255, 255, 255, 0.85); /* soft translucent white */
+  border: 1px solid rgba(200, 200, 200, 0.8); /* subtle border */
+  color: #000; /* text stays black */
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.8),
+              0 0 8px rgba(255, 255, 255, 0.5); /* inner + outer glow */
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar .form-control:focus {
+  background-color: #fff; /* solid white when focused */
+  border-color: #ffc107; /* match your warning accent */
+  box-shadow: 0 0 10px #fff,
+              0 0 20px #ffc107; /* glowing white + golden focus */
+  outline: none;
+}
+
+
+.text-center .lead {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+
+
+
+/* Make paragraphs a bit smaller + semi-bold */
+p {
+  font-size: 0.95rem;   /* slightly smaller than default */
+  font-weight: 500;     /* medium-bold without being heavy */
+  line-height: 1.6;     /* keeps it readable */
+  color: #333;          /* deep gray for modern look */
+}
+
+
+.btn-warning {
+  box-shadow: 0 0 12px rgba(255,193,7,0.7), 0 0 24px rgba(255,193,7,0.5);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.btn-warning:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 16px rgba(255,193,7,0.9), 0 0 32px rgba(255,193,7,0.6);
+}
+
+
+/* Hero image wrapper handles glow so it isn't clipped */
+.hero-frame {
+  position: relative;
+  display: inline-block;
+  border-radius: 18px;              /* one radius to rule them all */
+  overflow: visible;                /* let the glow breathe */
+}
+
+
+/* big black border + white glow, all respecting the radius */
+.hero-img {
+  display: block;                   /* removes inline gaps */
+  width: 100%;
+  border-radius: 12px;
+  /* thick black border as a zero-offset shadow ring */
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    0 8px 4px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 26px rgba(255,255,255,0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+/* optional: gentle lift on hover */
+.hero-img:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 6px #ffc107,
+    0 12px 36px rgba(0,0,0,0.3),
+    0 0 30px rgba(255,255,255,0.95),
+    0 0 70px rgba(255,255,255,0.65);
+}
+
+/* keep the image height sane on huge screens */
+.hero-img {
+  max-height: 60vh;
+  object-fit: cover;
+}
+
+
+.display-4 {
+  background: linear-gradient(90deg, #ffc107, #000000, #b9b9b9);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 12s linear infinite;
+}
+
+@keyframes shine {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+
+    
+    
+/* Use Bootstrap gutter variables (no column-gap!) */
+#featured-3 .row {
+  --bs-gutter-x: 1.25rem;  /* mobile spacing */
+  --bs-gutter-y: 1.5rem;
+}
+@media (min-width: 992px) { /* lg and up */
+  #featured-3 .row {
+    --bs-gutter-x: 2rem;
+    --bs-gutter-y: 2rem;
+  }
+}
+
+/* Make sure columns can shrink and cards fill them */
+#featured-3 .col { min-width: 0; }
+#featured-3 .glass-card { width: 100%; height: 100%; }
+
+
+/* Glassmorphism card */
+/* Make sure the card can render overlays */
+.glass-card {
+  position: relative;           /* ensure pseudo-elements are positioned */
+  overflow: hidden;             /* clip the sheen to the rounded corners */
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-radius: 7px;
+  
+  padding: 1.5rem;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    0 8px 24px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 15px rgba(255,255,255,0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+
+/* 1) Specular diagonal shine that glides across */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;                  /* extend beyond to avoid hard edges */
+  background: linear-gradient(
+    60deg,
+    rgba(255,255,255,0) 35%,
+    rgba(255,255,255,0.35) 48%,
+    rgba(255,255,255,0) 62%
+  );
+  transform: translateX(-60%) rotate(0.001deg);
+  animation: glassSweep 10s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+}
+
+@keyframes glassSweep {
+  0%   { transform: translateX(-60%) rotate(0.001deg); }
+  50%  { transform: translateX(60%)  rotate(0.001deg); }
+  100% { transform: translateX(-60%) rotate(0.001deg); }
+}
+
+/* 2) Edge lighting: faint inner rim + bottom glow for depth */
+.glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  /* inner rim and soft bottom gradient */
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.35),
+    inset 0 -40px 60px rgba(0,0,0,0.08);
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%) /* top bloom */;
+  mix-blend-mode: screen;
+}
+
+/* 3) Micro-noise texture (super subtle) */
+.glass-card > .glass-noise {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: .06;                 /* keep it VERY subtle */
+  background-image:
+    radial-gradient(rgba(0,0,0,0.6) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.6) 1px, transparent 1px);
+  background-size: 3px 3px, 5px 5px;
+  background-position: 0 0, 12px 8px;
+  mix-blend-mode: soft-light;
+}
+
+/* Hover polish */
+.glass-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.22);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass-card::before { animation: none; }
+}
+
+
+/* Icon chip that matches glass theme */
+.feature-icon{
+  width: 4rem;
+  height: 4rem;
+  border-radius: .75rem;
+  border: none;                                     /* remove black border */
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6),
+              0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* make controls readable on light slides */
+.carousel .carousel-control-prev-icon,
+.carousel .carousel-control-next-icon { filter: drop-shadow(0 0 6px rgba(0,0,0,.4)); }
+
+/* subtle glass edge */
+.carousel.rounded-4 { border: 1px solid rgba(255,255,255,.35); backdrop-filter: blur(6px); }
+
+
+
+
+/* Make the carousel frame look exactly like .hero-img */
+.media-frame{
+  border-radius: 12px;
+  overflow: hidden; /* clip children + glow */
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.35),
+    0 8px 4px rgba(0,0,0,0.25),
+    0 0 26px rgba(255,255,255,0.85),
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.media-frame:hover{
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 6px #ffc107,
+    0 12px 36px rgba(0,0,0,0.3),
+    0 0 30px rgba(255,255,255,0.95),
+    0 0 70px rgba(255,255,255,0.65);
+}
+
+/* (optional) keep the carousel tall & neatly cropped like your hero */
+.media-frame .carousel-item{ height: clamp(420px, 60vh, 700px); }
+.media-frame .carousel-item img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    
+/* Glossy beveled divider */
+.b-example-divider {
+    height: 3rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid rgb(255, 255, 255);
+    border-width: 1px 0;
+    box-shadow: inset 0 .5em 1.5em rgba(155, 155, 155, 0.1), inset 0 .125em .5em rgba(241, 241, 241, 0.15);
+}
+
+footer.border-top {
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  border-top-color: rgba(255,255,255,.35) !important;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.35),
+    0 8px 4px rgba(0,0,0,0.25),
+    0 0 26px rgba(255,255,255,0.85),
+    0 0 60px rgba(255,255,255,0.55);
+  
+}
+
+footer.border-top:hover {
+ 
+  box-shadow:
+    0 0 0 6px #ffc107,
+    0 12px 36px rgba(0,0,0,0.3),
+    0 0 30px rgba(255,255,255,0.95),
+    0 0 70px rgba(255,255,255,0.65);
+    transition: transform .35s ease, box-shadow .35s ease-in-out;
+
+
+}
+
+
+  </style>
+</head>
+<body>
+
+  <!------------------------------------------NAVBAR BEGIN------------------------------------------------>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+       <img src="assets/icons/box-seam.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+      Boxable AI</a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">
+            Home <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Services
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+
+      </ul>
+
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Postcode" aria-label="Search">
+        <button class="btn btn-outline-warning" type="submit">Check</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<!------------------------------------------NAVBAR END------------------------------------------------>
+
+<!------------------------------------------HERO BEGIN------------------------------------------------>
+
+<div class="px-4 pt-5 my-5 text-center"> 
+  <h1 class="display-4 fw-bold text-body-emphasis">Wait...Dont Move</h1> 
+  <div class="col-lg-6 mx-auto"> 
+    <p class="lead mb-4">Moving just got easier. Boxable is revolutionizing the moving experience by sending intelligent, AI-powered robots directly to your home. These robots are designed to handle every aspect of your move, 
+      from packing your delicate items with care to expertly lifting and loading heavy furniture. We take the load off your shoulders, so you can focus on the excitement of settling into your new space.</p> 
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5"> 
+      <button type="button" class="btn btn-warning btn-lg px-4 me-sm-3">Get a Quote</button>
+       <button type="button" class="btn btn-outline-secondary btn-lg px-4">Contact Us</button> 
+      </div> 
+    </div> 
+    <!-- Remove overflow-hidden / max-height wrapper -->
+<div class="container px-5">
+  <div class="hero-frame mx-auto" style="max-width: 900px;">
+    <img src="assets/img/inventory.png" class="hero-img img-fluid mb-4" alt="Robots moving boxes">
+  </div>
+</div>
+ 
+
+<!------------------------------------------HERO END------------------------------------------------>
+
+<!------------------------------------------FEATURES BEGIN------------------------------------------>
+
+<div class="container px-4 py-5" id="featured-3">
+  <h2 class="pb-2">Why Move With Us?</h2>
+
+  <div class="row row-cols-1 row-cols-lg-3 g-4 py-4">
+
+    <!-- Card 1 -->
+    <div class="col">
+      <div class="glass-card position-relative h-100">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
+          <img src="assets/icons/briefcase.svg" alt="" height="30">
+        </div>
+        <h3 class="fs-2 text-body-emphasis">Intelligent Packing &amp; Inventory</h3>
+        <p>Our AI-powered robots are trained to handle a wide variety of items, from delicate glassware to bulky electronics. They use advanced computer vision to carefully assess each object, determining the best way to pack it securely. Every item is digitally cataloged and tagged in real-time, creating a comprehensive, searchable inventory of your belongings. This means you’ll know exactly what’s in every box and where it’s located, eliminating the stress of lost or misplaced items.</p>
+        <a href="#" class="icon-link">Get a quote <img src="assets/icons/chevron-right.svg" alt=""></a>
+        
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col">
+      <div class="glass-card position-relative h-100">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
+          <img src="assets/icons/bus-front.svg" alt="" height="30">
+        </div>
+        <h3 class="fs-2 text-body-emphasis">Autonomous Lifting &amp; Transport</h3>
+        <p>Forget the back-breaking work of moving heavy furniture and appliances. Our robust robotic movers are equipped with powerful lifting mechanisms and all-terrain mobility, allowing them to effortlessly navigate stairs, tight corners, and uneven surfaces. They work in coordinated teams to safely lift, load, and transport your belongings from your home to the moving truck and into your new space.</p>
+        <a href="#" class="icon-link">Get a quote <img src="assets/icons/chevron-right.svg" alt=""></a>
+        
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col">
+      <div class="glass-card position-relative h-100">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
+          <img src="assets/icons/chat-square-heart.svg" alt="" height="30">
+        </div>
+        <h3 class="fs-2 text-body-emphasis">Seamless End-to-End Service</h3>
+        <p>Boxable offers a complete, stress-free moving solution. From the moment our robots arrive at your doorstep, they take care of everything—from meticulous packing and itemized inventory to secure transportation and unloading at your new address. You can monitor the entire process through our mobile app, providing you with complete peace of mind and the freedom to focus on the more exciting parts of moving.</p>
+        <a href="#" class="icon-link">Get a quote <img src="assets/icons/chevron-right.svg" alt=""></a>
+        
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!------------------------------------------FEATURES END------------------------------------------>
+
+<!------------------------------------------CAROUSEL BEGINS--------------------------------------->
+
+<!-- CAROUSEL (contained, same width as content) -->
+<div class="container px-4 py-5">
+  <div id="carouselExampleAutoplaying"
+     class="carousel slide media-frame"
+       data-bs-ride="carousel" data-bs-interval="3500">
+
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="assets/img/roboarm.png" class="d-block w-100" loading="eager">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/img/training.png" class="d-block w-100" loading="lazy">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/img/company.png" class="d-block w-100" loading="lazy">
+      </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button"
+            data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button"
+            data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+  </div>
+</div>
+
+<!----------------------------------------------------------CAROSUSEL END-------------------------------------------------------------------------->
+
+<!----------------------------------------------------------DIVIDER BEGIN-------------------------------------------------------------------------->
+
+<div class="b-example-divider"></div>
+<!----------------------------------------------------------DIVIDER/FOOTER BEGIN-------------------------------------------------------------------------->
+
+
+
+
+<div class="container">
+  <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top">
+    <!-- Brand / blurb -->
+    <div class="col mb-4 mb-md-0">
+      <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+        <img src="assets/icons/box-seam.svg" alt="Boxable AI" width="30" height="24" class="d-inline-block align-text-top">
+      </a>
+      <p class="text-muted mb-1">Robots that pack, lift & move.</p>
+      <p class="text-muted mb-0">© 2025 Boxable AI. All rights reserved.</p>
+    </div>
+
+    <!-- Newsletter / CTA -->
+    <div class="col mb-4 mb-md-0">
+      <h5>Get updates</h5>
+      <p class="text-muted">Product news, promotions & moving tips.</p>
+      <form class="row g-2 align-items-stretch" action="#" method="post" novalidate>
+    <div class="col-12 col-md">
+      <label for="footer-email" class="visually-hidden">Email</label>
+      <input id="footer-email" type="email" class="form-control" placeholder="you@email.com" required>
+    </div>
+    <div class="col-12 col-md-auto d-grid">
+      <button class="btn btn-warning" type="submit">Subscribe</button>
+    </div>
+  </form>
+
+  <small class="text-muted d-block mt-2">No spam. Unsubscribe anytime.</small>
+</div>
+
+    <!-- Services -->
+    <div class="col">
+      <h5>Services</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Intelligent Packing & Inventory</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Autonomous Lifting & Transport</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Smart Unloading & Placement</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Climate-Controlled Storage</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Moving Supplies Delivery</a></li>
+      </ul>
+    </div>
+
+    <!-- Help & Support -->
+    <div class="col">
+      <h5>Help & Support</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Track My Move</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Coverage Areas</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Insurance & Claims</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Contact Support</a></li>
+      </ul>
+    </div>
+
+    <!-- Company & Legal -->
+    <div class="col">
+      <h5>Company & Legal</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About Boxable AI</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Careers</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Partners</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Press Kit</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Privacy Policy</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Terms of Service</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Service Agreement</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Licenses & Insurance</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+
+
+<!----------------------------------------------------------DIVIDER/FOOTER END-------------------------------------------------------------------------->
+
+<div class="b-example-divider"></div>
+
+<!----------------------------------------------------------DIVIDER END-------------------------------------------------------------------------->
+<!-------------------------------------------------------------SCRIPTS---------------------------------------------------------------------------->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-------------------------------------------------------------SCRIPTS---------------------------------------------------------------------------->
+</body>
+</html>
