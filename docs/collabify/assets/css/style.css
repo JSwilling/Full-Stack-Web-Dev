@@ -127,6 +127,10 @@ body{
 /* Optional: tighten on small screens */
 @media (max-width: 576px){
   .hero-logo-wrap{ top: -50px; left: -30px; padding: 5px 0px; }
+  .hero-phone{
+    position: relative;
+    right: 50px;
+  }
 }
 
 
@@ -639,3 +643,4 @@ body{
 
 
 /*-------------------------------------------------------------- FOOTER END -----------------------------------------------------------------*/
+
