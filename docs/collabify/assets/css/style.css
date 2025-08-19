@@ -133,6 +133,17 @@ body{
   }
 }
 
+@media (max-width: 425px){
+  .hero-logo-wrap{ top: -50px; left: -30px; padding: 5px 0px; }
+  .hero-phone{
+    position: relative;
+    right: 110px;
+    
+    
+  }
+}
+
+
 
 .text-section{ position: static; } /* or just delete your .text-section rule */
 
@@ -643,4 +654,5 @@ body{
 
 
 /*-------------------------------------------------------------- FOOTER END -----------------------------------------------------------------*/
+
 
