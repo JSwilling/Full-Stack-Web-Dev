@@ -1,0 +1,641 @@
+/*----------------------------------------------------------------BODY-----------------------------------------------------------------*/
+
+/* ===== Subtle Aurora → White (with optional light pattern) ===== */
+
+
+/* ==== Fast, modern, subtle-strong gradient that fades to white ==== */
+:root{
+  /* Brand knobs */
+  --violet:#7c3aed;  /* violet */
+  --cyan:#22d3ee;    /* cyan */
+  --amber:#f59e0b;   /* amber */
+
+  /* Intensity knobs (raise α to intensify) */
+  --a1:0.28;  /* violet blob */
+  --a2:0.26;  /* cyan blob   */
+  --a3:0.18;  /* amber blob  */
+  --grid-alpha:0.03; /* pattern strength */
+}
+
+html, body { background:#fff; }
+
+body{
+  /* Three big, cheap blobs + a white fade. No fixed backgrounds. */
+  background:
+    radial-gradient(60vw 60vw at 0% -15%,
+      color-mix(in srgb, var(--violet) calc(var(--a1)*100%), transparent),
+      transparent 65%),
+    radial-gradient(60vw 60vw at 100% -10%,
+      color-mix(in srgb, var(--cyan)   calc(var(--a2)*100%), transparent),
+      transparent 68%),
+    radial-gradient(70vw 70vw at 50% 110%,
+      color-mix(in srgb, var(--amber)  calc(var(--a3)*100%), transparent),
+      transparent 70%),
+    linear-gradient(180deg, #f9fbff 0%, #ffffff 55%, #ffffff 100%);
+  background-repeat:no-repeat;
+  background-color:#fff;
+
+  /* Optional: ultra-light grid pattern baked in (very cheap) */
+  background-image:
+    /* grid vertical */
+    repeating-linear-gradient(0deg,
+      rgba(0,0,0,var(--grid-alpha)) 0 1px, transparent 1px 26px),
+    /* grid horizontal */
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,var(--grid-alpha)) 0 1px, transparent 1px 26px),
+    /* blobs again */
+    radial-gradient(60vw 60vw at 0% -15%,
+      color-mix(in srgb, var(--violet) calc(var(--a1)*100%), transparent),
+      transparent 65%),
+    radial-gradient(60vw 60vw at 100% -10%,
+      color-mix(in srgb, var(--cyan)   calc(var(--a2)*100%), transparent),
+      transparent 68%),
+    radial-gradient(70vw 70vw at 50% 110%,
+      color-mix(in srgb, var(--amber)  calc(var(--a3)*100%), transparent),
+      transparent 70%),
+    linear-gradient(180deg, #f9fbff 0%, #ffffff 55%, #ffffff 100%);
+}
+
+/* If you want EVEN less overhead, disable the pattern entirely: */
+/*
+body{
+  background:
+    radial-gradient(60vw 60vw at 0% -15%,
+      color-mix(in srgb, var(--violet) calc(var(--a1)*100%), transparent),
+      transparent 65%),
+    radial-gradient(60vw 60vw at 100% -10%,
+      color-mix(in srgb, var(--cyan)   calc(var(--a2)*100%), transparent),
+      transparent 68%),
+    radial-gradient(70vw 70vw at 50% 110%,
+      color-mix(in srgb, var(--amber)  calc(var(--a3)*100%), transparent),
+      transparent 70%),
+    linear-gradient(180deg, #f9fbff 0%, #ffffff 55%, #ffffff 100%);
+}
+*/
+
+/* A little extra punch on wide screens while keeping mobile light */
+@media (min-width: 992px){
+  :root{
+    --a1:0.32;
+    --a2:0.30;
+    --a3:0.22;
+    --grid-alpha:0.035;
+  }
+}
+
+/* Respect reduced motion users (no animation here anyway, just future-proof) */
+@media (prefers-reduced-motion: reduce){
+  /* Nothing moving, but keep hook for future */
+}
+
+
+
+#pricing {
+  background-color: transparent;
+}
+
+/*-------------------------------------------------------------- FONTS -----------------------------------------------------------------*/
+
+
+.pacifico-regular {
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+/*------------------------------------------------------------------ HERO -----------------------------------------------------------------*/
+
+
+
+/* Corner logo */
+.hero-logo-wrap{
+  position: absolute;         /* take it out of flow */
+  top: -75px;
+  left: -45px;
+  z-index: 3;
+}
+
+.hero-logo{
+  height: clamp(94px, 30vw, 360px);   /* responsive, never gigantic */
+  width: auto;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.2));
+  
+}
+
+/* Optional: tighten on small screens */
+@media (max-width: 576px){
+  .hero-logo-wrap{ top: -50px; left: -30px; padding: 5px 0px; }
+}
+
+
+.text-section{ position: static; } /* or just delete your .text-section rule */
+
+/* ========== HYPER-MODERN GRADIENT (Aurora Mesh + Light Sweep) ========== */
+
+/* ===== NEON AURORA (bold, animated, cross-browser) ===== */
+
+/* Ensure text/buttons sit above the phone if they overlap at large sizes */
+#title-header .phone-col { position: relative; z-index: 1; }
+#title-header .col-12.col-lg-6.order-2.order-lg-1 { position: relative; z-index: 2; }
+
+.hero{
+  position: relative;
+  isolation: isolate;
+  
+  overflow: hidden;
+  color: white;
+
+  /* strong dark base so colors pop */
+  background:
+    radial-gradient(60rem 40rem at  8%  -10%, rgba(34,211,238,.65), transparent 60%),
+    radial-gradient(50rem 35rem at 108%   8%, rgba(236,72,153,.60), transparent 62%),
+    radial-gradient(58rem 44rem at 82%  115%, rgba(139,92,246,.60), transparent 60%),
+    radial-gradient(46rem 36rem at  -8% 112%, rgba(16,185,129,.55), transparent 58%),
+    linear-gradient(120deg,#0b1020 0%, #1f2937 45%, #0b1020 100%);
+  background-blend-mode: screen, screen, screen, screen, normal;
+
+  /* make it breathe */
+  background-size: 160% 160%, 160% 160%, 160% 160%, 160% 160%, 100% 100%;
+  animation: blobs 12s ease-in infinite;
+}
+
+/* soft moving highlight */
+.hero::before{
+  content:"";
+  position:absolute; inset:-30%;
+  pointer-events:none;
+  filter: blur(18px) saturate(120%);
+  mix-blend-mode: overlay;
+  opacity:.6;
+  background:
+    conic-gradient(from var(--sweep,0deg),
+      transparent 0turn, #ffffff1a .08turn, transparent .16turn,
+      #ffffff14 .24turn, transparent .32turn, #ffffff18 .44turn, transparent .5turn);
+  animation: sweep 9s linear infinite;
+}
+
+/* extra glow blobs drifting */
+.hero::after{
+  content:"";
+  position:absolute; inset:-20%;
+  mix-blend-mode: screen; filter: blur(38px);
+  pointer-events: none;
+  opacity:.7;
+  background:
+    radial-gradient(55% 75% at 18% 28%, rgba(99,102,241,.35), transparent 70%),
+    radial-gradient(70% 55% at 82% 78%, rgba(59,130,246,.32), transparent 72%);
+  animation: floaty 9s ease-in-out infinite alternate;
+}
+
+/* Animations */
+
+@keyframes sweep { to { --sweep: 360deg; } }
+@keyframes floaty{
+  0%   { transform: translate(-2%, -1%) scale(1.00) rotate(.4deg); }
+  100% { transform: translate( 2%,  1%) scale(1.05) rotate(-.4deg); }
+}
+
+/* (Optional) darker base in dark mode */
+@media (prefers-color-scheme: dark){
+  .hero{ background-color:#0b1020; }
+}
+
+
+
+
+.hero h1{
+  line-height:1.1;
+  font-weight:800;
+  font-size: clamp(2.1rem, 3.2vw + 1rem, 4rem);
+}
+
+.hero .lead{
+  color: rgba(255,255,255,.92);
+  max-width: 46ch;
+  margin-inline: auto;            /* center on mobile */
+}
+
+@media (min-width: 992px){
+  .hero .lead{ margin-inline: 0; } /* left align on desktop */
+}
+
+/* Buttons on gradient */
+.hero .btn-outline-light{
+  --bs-btn-hover-bg:#fff;
+  --bs-btn-hover-color:#000;
+}
+
+/* Let the phone overhang its column on desktop */
+.phone-col{ overflow: visible; }
+
+/* Phone image (your PNG) */
+.hero-phone{
+  max-width: none;                           /* override Bootstrap’s 100% cap */
+  width: clamp(420px, 62vw, 1500px);         /* grow much larger on desktop */
+  height: auto;
+  filter: drop-shadow(0 32px 80px rgba(0,0,0,.35));
+  transform: none;   
+  pointer-events: none;                        /* straight on mobile */
+}
+
+/* Add the angled/offset look only on large screens */
+@media (min-width: 992px){
+  .hero-phone{
+    transform: translate(8%, 6%); /* fancy only on desktop */
+  }
+}
+
+/* -----------------------------------------------------HERO END---------------------------------------------------------------------------- */
+
+
+/* Full width well*/
+
+.well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 2px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 5px 3px rgba(0,0,0,.05);
+    box-shadow: inset 0 5px 3px rgba(0,0,0,.05);
+}
+
+/* Full width well*/
+
+/*---------------------------------------------------------------- FEATURE START -----------------------------------------------------------------*/
+
+.feature-icon-small{
+  width: 3rem; height: 3rem; font-size: 1.25rem;
+  background: rgba(0,0,0,.06);
+  backdrop-filter: blur(2px);
+}
+
+/*--------------------------------------------------- FEATURE END -----------------------------------------------------------------*/
+
+/*---------------------------------------------------------------- TESTIMONIALS START -----------------------------------------------------------------*/
+
+/* ===== Testimonials: hyper-modern glass + neon gradient ===== */
+.t-section{
+  position:relative;
+  background: radial-gradient(60% 80% at 10% 10%, #0f172a 0%, #0b1224 50%, #08101f 100%);
+  padding-block: clamp(3rem, 6vw, 6rem);
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* Aurora blobs behind cards */
+.t-section::before,
+.t-section::after{
+  content:"";
+  position:absolute; inset:-20%;
+  pointer-events:none; z-index:0;
+  filter: blur(60px) saturate(120%);
+  opacity:.6; mix-blend-mode:screen;
+}
+.t-section::before{
+  background:
+    radial-gradient(40% 35% at 20% 30%, #7c3aed55, transparent 60%),
+    radial-gradient(35% 40% at 80% 60%, #22d3ee44, transparent 70%),
+    radial-gradient(35% 35% at 50% 80%, #f59e0b33, transparent 65%);
+  animation: tFloatA 14s ease-in-out infinite alternate;
+}
+.t-section::after{
+  background:
+    radial-gradient(30% 30% at 85% 20%, #a855f744, transparent 70%),
+    radial-gradient(30% 30% at 15% 85%, #34d39944, transparent 70%);
+  animation: tFloatB 18s ease-in-out infinite alternate-reverse;
+}
+@keyframes tFloatA{ 0%{transform:translate(-2%,1%) scale(1)}100%{transform:translate(2%,-1%) scale(1.05)}}
+@keyframes tFloatB{ 0%{transform:translate(2%,-1%) scale(1)}100%{transform:translate(-2%,1%) scale(1.06)}}
+
+/* Mobile snap-carousel; desktop grid */
+.t-row{
+  scroll-snap-type: x mandatory;
+  z-index:1; /* above blobs */
+}
+.t-row > .col{ min-width: 85%; scroll-snap-align: start; }
+@media (min-width: 768px){
+  .t-row{ overflow: visible; scroll-snap-type: none; }
+  .t-row > .col{ min-width: 0; }
+}
+
+/* Card: glass with animated gradient border */
+.t-card{
+  background: rgba(255,255,255,.06);
+  border-radius: 1.25rem;
+  position: relative;
+  z-index: 1;
+  color: #e5e7eb;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.25);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  overflow: hidden;
+}
+.t-card::before{
+  content:"";
+  position:absolute; inset:-1px;
+  border-radius:inherit;
+  padding:1px;                        /* border thickness */
+  background: conic-gradient(from var(--spin,0deg),
+    #22d3ee, #a855f7, #f59e0b, #34d399, #22d3ee);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: tSpin 8s linear infinite;
+  opacity:.9;
+}
+@keyframes tSpin{ to { --spin: 360deg; }}
+
+/* Avatar with animated gradient ring */
+.t-avatar{
+  display:inline-grid; place-items:center;
+  width:56px; height:56px; border-radius:50%;
+  padding:2px; background:
+    conic-gradient(from var(--ring,0deg),
+      #a78bfa, #22d3ee, #34d399, #f59e0b, #a78bfa);
+  animation: tRing 6s linear infinite;
+}
+.t-avatar img{ width:100%; height:100%; border-radius:50%; display:block; }
+@keyframes tRing{ to { --ring: 360deg; }}
+
+/* Quote mark flourish */
+.t-quote{
+  position:relative; line-height:1.6;
+}
+.t-quote::before{
+  content:"“";
+  position:absolute; left:-.4rem; top:-.8rem;
+  font-size:3rem; line-height:1; color:#ffffff22;
+  font-weight:900; pointer-events:none;
+}
+
+/* Stars spacing */
+.t-stars i { margin-left: .125rem; }
+/*-------------------------------------------------------------- TESTIMONIALS END -----------------------------------------------------------------*/
+
+/*---------------------------------------------------------------- PRICING START -----------------------------------------------------------------*/
+
+/* ---------- Pricing (light, hyper-modern) ---------- */
+
+.p-section{
+  background:
+    radial-gradient(1200px 800px at 70% -200px, rgba(99,102,241,.12), transparent 60%),
+    radial-gradient(900px 600px at -200px -150px, rgba(56,189,248,.12), transparent 60%),
+    #ffffff;
+}
+
+.letter-1 { letter-spacing: .08em; }
+
+/* Cards */
+.p-card{
+  position: relative;
+  background: rgba(255,255,255,.9);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow:
+    0 1px 0 rgba(16,24,40,.04),
+    0 10px 30px rgba(16,24,40,.06);
+  border: 1px solid rgba(15,23,42,.06);
+  transition: transform .25s ease, box-shadow .25s ease;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Animated gradient border ring */
+.p-card::before{
+  content:"";
+  position:absolute; inset:-1px;
+  border-radius: inherit;
+  padding: 1px; /* border thickness */
+  background: conic-gradient(from var(--spin,0deg),
+    #60a5fa, #a78bfa, #34d399, #f59e0b, #60a5fa);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity:.45;
+  animation: pSpin 12s linear infinite;
+  pointer-events:none;
+}
+@keyframes pSpin { to { --spin: 360deg; } }
+
+.p-card:hover{
+  transform: translateY(-6px);
+  box-shadow:
+    0 6px 20px rgba(16,24,40,.08),
+    0 18px 60px rgba(16,24,40,.08);
+}
+
+/* Highlighted plan */
+.p-card.is-popular{
+  background: linear-gradient(180deg, #ffffff 0%, #fafafc 100%);
+}
+.p-card.is-popular::before{ opacity:.75; }
+
+/* Ribbon */
+.p-ribbon{
+  position:absolute; top:12px; right:-34px;
+  background: linear-gradient(90deg,#6366f1,#22d3ee);
+  color:#fff; font-size:.75rem; font-weight:700;
+  padding:.35rem 2.25rem;
+  transform: rotate(12deg);
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(99,102,241,.25);
+  z-index:2;
+}
+
+/* Header */
+.p-card__top{ text-align:center; margin-bottom: .75rem; }
+.p-pill{
+  display:inline-block;
+  font-weight:600;
+  font-size:.9rem;
+  padding:.35rem .7rem;
+  border-radius:999px;
+  background:#f3f4f6;
+  border:1px solid #eceef2;
+  margin-bottom:.5rem;
+}
+.p-price{
+  display:flex; align-items:flex-end; justify-content:center; gap:.25rem;
+  margin-bottom:.25rem;
+}
+.p-price__amount{ font-size: clamp(2rem, 2.2rem + 1vw, 3rem); font-weight:800; line-height:1; }
+.p-price__period{ color:#6b7280; font-weight:500; }
+
+/* Feature list */
+.p-features{
+  list-style:none; padding:0; margin:1rem 0 1.25rem 0;
+  display:grid; gap:.5rem;
+}
+.p-features li{
+  display:flex; gap:.5rem; align-items:flex-start;
+  color:#334155;
+}
+.p-features i{ color:#16a34a; margin-top:.15rem; }
+
+/* Table */
+.p-table{
+  border-radius: 16px; overflow:hidden;
+  box-shadow: 0 1px 0 rgba(16,24,40,.04), 0 10px 30px rgba(16,24,40,.06);
+  border:1px solid rgba(15,23,42,.06);
+}
+.p-table thead th{
+  background: linear-gradient(180deg,#f8fafc 0%,#f3f4f6 100%);
+  font-weight:700;
+}
+.p-table th, .p-table td{ padding: .9rem .75rem; }
+.p-table tbody tr:nth-child(odd){ background:#ffffff; }
+.p-table tbody tr:nth-child(even){ background:#fbfcfe; }
+
+
+/*------------------------------------------------- PRICING END -----------------------------------------------------------------*/
+
+/*---------------------------------------------------------------- FOOTER START -----------------------------------------------------------------*/
+
+/* ===================== Dark Hyper-Modern Footer ===================== */
+.site-footer{
+  --bg1:#0b1020; --bg2:#0a0f1a;
+  --violet:#7c3aed; --cyan:#22d3ee; --blue:#60a5fa; --amber:#f59e0b;
+  color:#e5e7eb;
+  position:relative; isolation:isolate; overflow:hidden;
+  background:
+    radial-gradient(900px 600px at 15% -10%, rgba(34,211,238,.12), transparent 60%),
+    radial-gradient(800px 500px at 110% 10%, rgba(124,58,237,.10), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+
+/* subtle grid lines */
+.site-footer::before{
+  content:"";
+  position:absolute; inset:-20%;
+  background:
+    repeating-linear-gradient(to right, rgba(255,255,255,.03) 0 1px, transparent 1px 120px),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.02) 0 1px, transparent 1px 120px);
+  opacity:.7; pointer-events:none;
+}
+
+/* aurora drift */
+.site-footer::after{
+  content:"";
+  position:absolute; inset:-30%;
+  background:
+    radial-gradient(60% 60% at 80% 120%, rgba(96,165,250,.12), transparent 60%),
+    radial-gradient(50% 50% at -10% 80%, rgba(245,158,11,.10), transparent 60%);
+  filter: blur(22px); mix-blend-mode: screen; opacity:.9;
+  animation: ftFloat 12s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes ftFloat{
+  0%{ transform: translateY(-1%) scale(1.00); }
+  100%{ transform: translateY(1%)  scale(1.02); }
+}
+
+/* brand */
+.brand-logo{ height:28px; width:auto; filter:drop-shadow(0 2px 10px rgba(0,0,0,.3)); }
+.brand-name{ font-weight:800; font-size:1.25rem; color:#fff; }
+
+/* titles + nav */
+.ft-title{ color:#fff; font-weight:700; letter-spacing:.02em; margin-bottom:.75rem; }
+.ft-nav{ list-style:none; padding:0; margin:0; }
+.ft-nav li a{
+  display:block; padding:.3rem 0;
+  color:rgba(255,255,255,.75); text-decoration:none;
+  border-radius:10px;
+  transition: color .2s ease, background .2s ease, transform .2s ease;
+}
+.ft-nav li a:hover{
+  color:#fff; background:rgba(255,255,255,.06); transform: translateX(2px);
+}
+
+/* newsletter */
+.ft-form{ display:flex; gap:.6rem; }
+.ft-input{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff; border-radius:14px; padding:.7rem .9rem;
+}
+.ft-input::placeholder{ color:rgba(255,255,255,.55); }
+.ft-input:focus{
+  background:rgba(255,255,255,.10);
+  border-color:#7c3aed;
+  box-shadow:0 0 0 .25rem rgba(124,58,237,.25); outline:0;
+}
+.ft-btn{
+  border-radius:14px; padding:.7rem 1rem; font-weight:700; border:0;
+  color:#0b1020;
+  background:linear-gradient(90deg,#6366f1,#22d3ee);
+}
+.ft-btn:hover{ filter:brightness(1.05); }
+
+/* social */
+.social{
+  width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:12px; color:#e5e7eb;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.10);
+  transition: transform .2s ease, background .2s ease;
+}
+.social:hover{
+  transform:translateY(-2px);
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+}
+
+/* small meta links */
+.link-muted{ color:rgba(255,255,255,.7); text-decoration:none; }
+.link-muted:hover{ color:#fff; }
+.ft-divider{ border-color:rgba(255,255,255,.08)!important; }
+
+/* make it comfy on small screens */
+@media (max-width: 575.98px){
+  .ft-form{ flex-direction:column; }
+  .ft-btn{ width:100%; }
+}
+
+/* ==== Footer contrast patch ==== */
+.site-footer .ft-title{ color:#fff; opacity:1; }
+
+.site-footer .text-muted,
+.site-footer .text-body-secondary{
+  color:rgba(255,255,255,.82) !important;   /* brighter */
+}
+
+.site-footer .ft-nav li a{
+  color:rgba(255,255,255,.88);
+}
+.site-footer .ft-nav li a:hover{
+  color:#fff;
+  background:rgba(255,255,255,.12);
+}
+
+.site-footer .link-muted{
+  color:rgba(255,255,255,.82);
+}
+.site-footer .link-muted:hover{ color:#fff; }
+
+.site-footer .ft-input{ color:#fff; }
+.site-footer .ft-input::placeholder{ color:rgba(255,255,255,.75); }
+
+/* Bigger brand mark */
+.site-footer .brand{ gap:.6rem; }
+.site-footer .brand-logo{
+  height: clamp(150px, 2.6vw, 42px);  /* scale with viewport */
+  width:auto;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+}
+.site-footer .brand-name{
+  font-weight:800;
+  font-size: clamp(1.05rem, 1.2vw + .6rem, 1.35rem);
+  color:#fff;
+}
+
+
+
+/*-------------------------------------------------------------- FOOTER END -----------------------------------------------------------------*/
