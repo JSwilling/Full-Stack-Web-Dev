@@ -300,34 +300,38 @@
     </div>
 
     <!-- Right: Glass Contact Form -->
-    <form class="contact-glass" id="contact-form" action="#" method="post" novalidate>
+    <form class="contact-glass" id="contact-form" action="https://formsubmit.co/joshua.m.swilling@gmail.com" method="POST" novalidate>
       <h3>Send me a message</h3>
 
-      <div class="field">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" placeholder="Your name" required>
-      </div>
+      <!-- FormSubmit options -->
+  <input type="hidden" name="_subject" value="Portfolio Contact — Joshua Swilling">
+  <input type="hidden" name="_captcha"  value="false">
+  <input type="hidden" name="_template" value="table">
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="you@email.com" required>
-      </div>
+  <div class="field">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" placeholder="Your name" required>
+  </div>
 
-      <div class="field">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" placeholder="What can we build together?" required></textarea>
-      </div>
+  <div class="field">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" placeholder="you@email.com" required>
+  </div>
 
-      <div class="actions">
-        <button type="submit" class="btn primary">
-          <i class="bi bi-send"></i> Send
-        </button>
-        <a class="btn ghost" href="mailto:hello@yourdomain.com?subject=Hello%20Josh&body=Hi%20Josh,%0A%0A" aria-label="Open email client">
-          <i class="bi bi-envelope-open"></i> Email instead
-        </a>
-      </div>
+  <div class="field">
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="5" placeholder="What can we build together?" required></textarea>
+  </div>
 
-      <p class="tiny">No spam—ever. I’ll get back to you ASAP.</p>
+  <div class="actions">
+    <button type="submit" class="btn primary" id="send-btn">
+      <i class="bi bi-send"></i> Send
+    </button>
+    
+  </div>
+
+  <p class="form-status" id="form-status" aria-live="polite" role="status"></p>
+  <p class="tiny">No spam—ever. I’ll get back to you ASAP.</p>
     </form>
   </div>
 </section>
@@ -377,15 +381,53 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // contact form: simple mailto fallback (no backend)
-  document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+  const form   = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  const sendBtn= document.getElementById('send-btn');
+  const mailto = document.getElementById('mailto-btn');
+
+  // AJAX submit to FormSubmit (no page reload)
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = encodeURIComponent(e.target.name.value.trim());
-    const email = encodeURIComponent(e.target.email.value.trim());
-    const msg = encodeURIComponent(e.target.message.value.trim());
+    status.className = 'form-status';
+    status.textContent = '';
+    sendBtn.classList.add('is-sending');
+    sendBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Sending…';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+
+      if (res.ok) {
+        status.classList.add('ok');
+        status.textContent = 'Message sent! Thanks — I’ll reply soon.';
+        form.reset(); // ✅ clear fields
+      } else {
+        const data = await res.json().catch(()=> ({}));
+        throw new Error(data?.message || 'Unable to send. Try the Email button.');
+      }
+    } catch (err) {
+      status.classList.add('err');
+      status.textContent = err.message;
+    } finally {
+      sendBtn.classList.remove('is-sending');
+      sendBtn.innerHTML = '<i class="bi bi-send"></i> Send';
+    }
+  });
+
+  // Build a proper mailto with current form values
+  mailto?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const name = encodeURIComponent(form.name.value.trim() || 'Someone');
+    const email= encodeURIComponent(form.email.value.trim());
+    const msg  = encodeURIComponent(form.message.value.trim());
     const subject = `Hello Josh from ${name}`;
-    const body = `Name: ${name}%0AEmail: ${email}%0A%0A${msg}`;
-    window.location.href = `mailto:joshua.m.swilling@gmail.com?subject=${subject}&body=${body}`;
+    const body    = `Name: ${name}%0AEmail: ${email}%0A%0A${msg}`;
+    window.location.href =
+      `mailto:joshua.m.swilling@gmail.com?subject=${subject}&body=${body}`;
   });
 </script>
 
