@@ -210,7 +210,12 @@
   border-radius: 20px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.048); /* keeps image background clean */
-  box-shadow: 0 30px 48px rgba(0,0,0,0.1);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    0 8px 4px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 26px rgba(255,255,255,0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
   z-index: 0; /* make sure pseudo-element sits behind image */
 }
 
@@ -324,6 +329,7 @@
 .greeting .container {
   max-width: 1400px; /* give more space on desktops */
   margin: 0 auto;
+  
 }
 
 
@@ -365,6 +371,7 @@
   display: grid;
   grid-template-columns: 1fr;  /* default: single column */
   gap: clamp(1rem, 2.2vw, 1.6rem);
+  
 }
 
 /* Responsive */
@@ -401,7 +408,12 @@
 .g-card{
   background:#ffffff; border:1px solid rgba(0,0,0,0.08); border-radius:16px;
   padding: 1.1rem 1.1rem 1rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    0 10px 8px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 10px rgba(97, 205, 255, 0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 .g-card:hover{
@@ -416,6 +428,7 @@
 .g-card {
   position: relative;
   overflow: hidden;
+  
 }
 
 .g-card::after {
@@ -487,8 +500,13 @@
   position: relative;
   padding: clamp(2.5rem, 6vw, 4.5rem) 1.5rem;
   overflow: hidden;
+  
 }
-.projects .container{ max-width: 1200px; margin: 0 auto; }
+.projects .container{ 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  
+}
 
 /* Grid background */
 .proj-bg {
@@ -496,6 +514,7 @@
   inset: 0;
   background: linear-gradient(135deg, #ffffff, #f5faff, #eaf7ff);
   z-index: -2;
+  
 }
 
 /* Layer: moving gradient */
@@ -544,7 +563,12 @@
   padding: 14px 48px;         /* room for arrows */
   background: rgba(255,255,255,.55);
   border: 1px solid rgba(0,0,0,.08);
-  box-shadow: 0 14px 40px rgba(0,0,0,.08);
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    0 10px 4px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 26px rgba(255,255,255,0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
   backdrop-filter: blur(10px) saturate(115%);
 }
 
@@ -570,7 +594,13 @@
   background: rgba(255,255,255,.7);
   border: 1px solid rgba(0,0,0,.08);
   border-radius: 16px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+  margin: 25px;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    0 2px 4px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 5px rgba(255,255,255,0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
   overflow: hidden;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
@@ -741,7 +771,12 @@
   padding: clamp(16px, 2.5vw, 22px);
   background: rgba(255,255,255,.6);
   border: 1px solid rgba(0,0,0,.08);
-  box-shadow: 0 18px 40px rgba(0,0,0,.10);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),                 /* << thick black border */
+    10px 20px 4px rgba(0,0,0,0.25),    /* subtle drop depth */
+    0 0 26px rgba(127, 226, 243, 0.85),/* white glow halo */
+    0 0 60px rgba(255,255,255,0.55);
+  transition: transform .35s ease, box-shadow .35s ease;
   backdrop-filter: blur(12px) saturate(115%);
   color: var(--ink);
   overflow: hidden;
@@ -866,4 +901,3 @@ input.is-invalid, textarea.is-invalid {
 
 
 /* ===== CONTACT/FOOTER END ============================================================================================ */
-
