@@ -381,14 +381,60 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  const form   = document.getElementById('contact-form');
-  const status = document.getElementById('form-status');
-  const sendBtn= document.getElementById('send-btn');
-  const mailto = document.getElementById('mailto-btn');
+  const form    = document.getElementById('contact-form');
+  const status  = document.getElementById('form-status');
+  const sendBtn = document.getElementById('send-btn');
+  const mailto  = document.getElementById('mailto-btn');
 
-  // AJAX submit to FormSubmit (no page reload)
+  // Helper: validate fields
+  function validateForm() {
+    if (!form) return false;
+
+    // clear previous invalid states
+    [...form.querySelectorAll('.is-invalid')].forEach(el => el.classList.remove('is-invalid'));
+
+    const nameEl = form.name;
+    const emailEl = form.email;
+    const msgEl = form.message;
+
+    const name = nameEl.value.trim();
+    const email = emailEl.value.trim();
+    const msg = msgEl.value.trim();
+
+    let valid = true;
+
+    if (!name)  { nameEl.classList.add('is-invalid'); valid = false; }
+    if (!email) { emailEl.classList.add('is-invalid'); valid = false; }
+    if (!msg)   { msgEl.classList.add('is-invalid'); valid = false; }
+
+    // email format check
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (email && !emailOk) { emailEl.classList.add('is-invalid'); valid = false; }
+
+    if (!valid) {
+      status.className = 'form-status err';
+      status.textContent = 'Please fill out all fields with a valid email before sending.';
+    } else {
+      status.className = 'form-status';
+      status.textContent = '';
+    }
+    return valid;
+  }
+
+  // Clear invalid style while typing
+  ['input', 'blur'].forEach(evt => {
+    form?.addEventListener(evt, (e) => {
+      const t = e.target;
+      if (!(t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement)) return;
+      if (t.value.trim()) t.classList.remove('is-invalid');
+    }, true);
+  });
+
+  // AJAX submit to FormSubmit (no reload) — requires your form action points to FormSubmit
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     status.className = 'form-status';
     status.textContent = '';
     sendBtn.classList.add('is-sending');
@@ -402,7 +448,7 @@
       });
 
       if (res.ok) {
-        status.classList.add('ok');
+        status.className = 'form-status ok';
         status.textContent = 'Message sent! Thanks — I’ll reply soon.';
         form.reset(); // ✅ clear fields
       } else {
@@ -410,22 +456,25 @@
         throw new Error(data?.message || 'Unable to send. Try the Email button.');
       }
     } catch (err) {
-      status.classList.add('err');
-      status.textContent = err.message;
+      status.className = 'form-status err';
+      status.textContent = err.message || 'Something went wrong. Please try again.';
     } finally {
       sendBtn.classList.remove('is-sending');
       sendBtn.innerHTML = '<i class="bi bi-send"></i> Send';
     }
   });
 
-  // Build a proper mailto with current form values
+  // Build a proper mailto with current form values — also validate first
   mailto?.addEventListener('click', (e) => {
     e.preventDefault();
-    const name = encodeURIComponent(form.name.value.trim() || 'Someone');
-    const email= encodeURIComponent(form.email.value.trim());
-    const msg  = encodeURIComponent(form.message.value.trim());
+    if (!validateForm()) return;
+
+    const name  = encodeURIComponent(form.name.value.trim());
+    const email = encodeURIComponent(form.email.value.trim());
+    const msg   = encodeURIComponent(form.message.value.trim());
     const subject = `Hello Josh from ${name}`;
     const body    = `Name: ${name}%0AEmail: ${email}%0A%0A${msg}`;
+
     window.location.href =
       `mailto:joshua.m.swilling@gmail.com?subject=${subject}&body=${body}`;
   });
