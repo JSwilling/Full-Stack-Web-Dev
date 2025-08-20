@@ -849,9 +849,21 @@ input:focus, textarea:focus{
 }
 @keyframes stripe{ from{background-position:0% 50%} to{background-position:100% 50%} }
 
+.form-status { margin:.6rem 0 0; font-weight:700; }
+.form-status.ok  { color:#0f62fe; }    /* blue */
+.form-status.err { color:#ef4444; }    /* red  */
+.btn.is-sending { opacity:.7; pointer-events:none; }
+
+/* invalid field styles */
+input.is-invalid, textarea.is-invalid {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, .12) !important;
+}
+
 
 
 
 
 
 /* ===== CONTACT/FOOTER END ============================================================================================ */
+
