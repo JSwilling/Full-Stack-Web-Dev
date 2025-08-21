@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+  DOCTYPE tells the browser to use modern HTML5 parsing mode.
+  Always include this at the very top of your HTML files.
+-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <!--
+      UTF-8 supports most characters/symbols in the world.
+      This prevents weird text encoding issues.
+    -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      Makes the layout responsive on phones/tablets.
+      Without this, mobile browsers may zoom out and your design looks tiny.
+    -->
+
+    <title>Dicee Roulette</title>
+    <!--
+      The page title appears in the browser tab and in bookmarks/search results.
+      Keep it short but descriptive.
+    -->
+
+    <!-- Site stylesheet (your main CSS rules) -->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <!--
+      Performance hint: preconnect to Google Fonts’ servers so the font files
+      can start downloading a tad sooner.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!--
+      Load the Orbitron (and Pacifico if you use it) font families.
+      Make sure the families here match what you reference in CSS.
+      (You’re using Orbitron in headings and paragraphs.)
+    -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!--
+      Main page wrapper.
+      The .container class is styled as a CSS Grid in styles.css,
+      with named areas for title, result, dice1, dice2, and controls.
+    -->
+    <div class="container">
+      <!-- Page title (occupies the "title" grid area) -->
+      <h1 class="title">Dicee Roulette</h1>
+
+      <!--
+        The live result text.
+        aria-live="polite" means: when the text inside updates, screen readers
+        will announce the change at the next pause (without interrupting the user).
+        Good for dynamic content like game results.
+      -->
+      <p class="result" aria-live="polite">
+        🚩 <span class="winner">—</span>
+        <span class="draw"></span>
+        with <span class="winResult">—</span>
+      </p>
+
+      <!--
+        Dice area for Player 1 (occupies "dice1" grid area)
+        .dice wrapper helps center content; .subtitle labels the player.
+        The <img> has an initial face and an alt description for accessibility.
+      -->
+      <div class="dice dice1">
+        <p class="subtitle">Player 1</p>
+        <img
+          class="img1"
+          src="assets/images/dice_1.png"
+          alt="Player 1 die face 1"
+        />
+      </div>
+
+      <!-- Dice area for Player 2 (occupies "dice2" grid area) -->
+      <div class="dice dice2">
+        <p class="subtitle">Player 2</p>
+        <img
+          class="img2"
+          src="assets/images/dice_1.png"
+          alt="Player 2 die face 1"
+        />
+      </div>
+
+      <!--
+        Controls row (occupies "controls" grid area)
+        Button triggers a roll; JS also allows Space/Enter to roll.
+        The extra spans inside the button are decorative layers for the
+        glow and shadow (styled in CSS).
+      -->
+      <div class="controls">
+        <button
+          id="rollBtn"
+          class="roll-btn"
+          type="button"
+          aria-label="Roll the dice"
+        >
+          <span class="btn-glow"></span>
+          <span class="btn-label">Roll 🎲</span>
+          <span class="btn-shadow"></span>
+        </button>
+
+        <!-- Small hint that keyboard also works -->
+        <p class="hint">(Press <kbd>Space</kbd> or <kbd>Enter</kbd>)</p>
+      </div>
+    </div>
+
+    <!--
+      Simple footer.
+      If you ever add links here, remember to give them accessible text.
+    -->
+    <footer>
+      www 🎲 App Brewery 🎲 com — (click Roll to play)
+    </footer>
+
+    <!--
+      If JavaScript is disabled in the browser, this <noscript> block will show.
+      Useful for telling users the page needs JS to work.
+    -->
+    <noscript>
+      For the full experience, please enable JavaScript. The dice won’t roll without it. 🙂
+    </noscript>
+
+    <!--
+      Your main JS file.
+      "defer" waits until HTML is parsed before running the script, which helps
+      avoid issues where JS tries to access elements that don’t exist yet.
+      (Your JS also listens for DOMContentLoaded, which is safe/redundant.)
+    -->
+    <script src="assets/JS/index.js" defer></script>
+  </body>
+</html>
