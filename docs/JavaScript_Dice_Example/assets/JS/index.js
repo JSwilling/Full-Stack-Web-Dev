@@ -100,7 +100,21 @@ function updateDie(imgSelector, value, animClass) {
    - Decide who wins and update the on-screen text
    - Play the roll sound (if allowed by the browser)
 */
+
+
+// sets the scoreboard as hidden
+const fancyPanel = document.getElementById('fancyPanel');
+let hasRevealedPanel = false;
+
+
 function rollOnce() {
+
+   // Reveal the panel the first time the user rolls
+   if (fancyPanel && !hasRevealedPanel) {
+     fancyPanel.classList.toggle('is-invisible'); // <-- your requested line
+     hasRevealedPanel = true;
+}
+   
   // Generate random integer 1..6 for each die
   const n1 = Math.floor(Math.random() * 6) + 1;
   const n2 = Math.floor(Math.random() * 6) + 1;
@@ -204,3 +218,4 @@ document.addEventListener("DOMContentLoaded", init);
       - Ensure your HTML has elements with classes: .img1, .img2, .winner, .draw, .winResult
       - Ensure there’s a button with id="rollBtn".
 */
+
