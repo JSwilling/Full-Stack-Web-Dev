@@ -108,9 +108,12 @@ img {
 h1 {
   margin: 30px;
   font-family: 'Orbitron', cursive;
-  text-shadow: 5px 0 #232931;               /* subtle 3D look */
+  text-shadow: 5px 02px #938c96;               /* subtle 3D look */
   font-size: clamp(2.25rem, 6vw, 8rem);     /* responsive title size */
   color: black;
+  font-weight:bold;
+  box-shadow: 0 0 8px 2px white;
+  border-radius: 20px;
 }
 
 p {
