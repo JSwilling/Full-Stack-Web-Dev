@@ -70,6 +70,7 @@ body {
   display: grid;
   align-content: center;
   justify-content: center;
+  font-weight: bold;
 }
 
 
@@ -124,6 +125,7 @@ footer {
   color: #EEEEEE;
   text-align: center;
   font-family: 'Orbitron', cursive;
+  font-weight: bold;
 }
 
 
