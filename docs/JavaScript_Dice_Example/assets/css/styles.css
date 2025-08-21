@@ -72,6 +72,25 @@ body {
   justify-content: center;
 }
 
+
+/* fully hide and remove from layout */
+.is-hidden {
+  display: none !important;
+}
+
+/* or use a fade-out (stays in layout, animates nicely) */
+.is-invisible {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s ease, visibility .25s ease;
+}
+
+#fancyPanel {
+  transition: opacity .25s ease, visibility .25s ease;
+}
+
+
 /* Make dice images responsive: clamp between 180px and 360px,
    otherwise use 80% of the container width */
 img {
