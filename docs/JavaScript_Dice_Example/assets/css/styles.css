@@ -1,41 +1,230 @@
-.container {
-  width: 70%;
-  margin: auto;
-  text-align: center;
-}
+/************************************************************
+ * Dicee Roulette — Beginner-friendly, fully commented CSS
+ * --------------------------------------------------------
+ * What this file handles:
+ * 1) Global look & background animation
+ * 2) Responsive layout using CSS Grid
+ * 3) Typography & basic element styles
+ * 4) Dice animations (slide + shake)
+ * 5) Fancy glassy "Roll" button
+ * 6) Reduced-motion accessibility
+ ************************************************************/
 
-.dice {
-  text-align: center;
-  display: inline-block;
-
-}
-
+/* ----------------------------------------------------------
+   1) GLOBAL STYLES + BACKGROUND ANIMATION
+   ----------------------------------------------------------
+   - Set a base font for the whole page (fallbacks included).
+   - Add a multi-color animated gradient background.
+   - Give the page a soft, rounded border so it looks like a card.
+*/
 body {
-  background-color: #393E46;
+  font-family: "Sono", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* The gradient moves over time because we animate background-position below */
+  background: linear-gradient(45deg, #bbdb5b, #a5a5a4, #26d4eb, #f02323);
+  background-size: 400% 400%;              /* makes the gradient larger than the viewport for a smoother pan */
+  border: 4px solid white;                  /* white frame around the page */
+  border-radius: 12px;                      /* rounded corners */
+  animation: gradientAnimation 10s ease infinite; /* run the background animation forever */
 }
 
+/* This animation shifts the gradient horizontally, then back */
+@keyframes gradientAnimation {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+
+/* ----------------------------------------------------------
+   2) PAGE LAYOUT — CSS GRID
+   ----------------------------------------------------------
+   We use a responsive grid with named areas. This keeps the
+   HTML simple and the layout predictable.
+*/
+.container {
+  width: min(1100px, 90%);                  /* responsive max width */
+  margin: 3rem auto;                        /* center horizontally with nice vertical spacing */
+  display: grid;
+  grid-template-columns: 1fr 1fr;           /* two equal columns */
+  grid-template-areas:
+    "title    title"                        /* title spans both columns */
+    "result   result"                       /* result spans both columns */
+    "dice1    dice2"                        /* dice sit side-by-side */
+    "controls controls";                    /* button row spans both columns */
+  gap: 1.25rem 2rem;                        /* row gap, column gap */
+  text-align: center;                       /* center text inside grid children */
+}
+
+/* Assign named grid areas to elements */
+.title    { grid-area: title; }
+.result   { grid-area: result; }
+.dice1    { grid-area: dice1; }
+.dice2    { grid-area: dice2; }
+.controls { grid-area: controls; display: grid; place-items: center; gap: .5rem; }
+
+/* Utility: center content inside dice wrappers */
+.dice { display: grid; place-items: center; }
+
+/* Subtitle under each player name */
+.subtitle {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+}
+
+/* Make dice images responsive: clamp between 180px and 360px,
+   otherwise use 80% of the container width */
+img {
+  width: clamp(180px, 80%, 360px);
+}
+
+
+/* ----------------------------------------------------------
+   3) TYPOGRAPHY + BASIC ELEMENTS
+   ----------------------------------------------------------
+   - Use Orbitron for headings and text (matches your HTML).
+   - Provide good contrast and readable sizes.
+*/
 h1 {
   margin: 30px;
-  font-family: 'Lobster', cursive;
-  text-shadow: 5px 0 #232931;
-  font-size: 8rem;
-  color: #4ECCA3;
+  font-family: 'Orbitron', cursive;
+  text-shadow: 5px 0 #232931;               /* subtle 3D look */
+  font-size: clamp(2.25rem, 6vw, 8rem);     /* responsive title size */
+  color: black;
 }
 
 p {
-  font-size: 2rem;
-  color: #4ECCA3;
-  font-family: 'Indie Flower', cursive;
+  font-size: clamp(1rem, 2.2vw, 2rem);      /* responsive paragraph size */
+  color: grey;
+  font-family: 'Orbitron', cursive;
 }
 
-img {
-  width: 80%;
-}
-
+/* Footer small and centered */
 footer {
-  margin-top: 5%;
+  margin-bottom: 1%;
   color: #EEEEEE;
   text-align: center;
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Orbitron', cursive;
+}
 
+
+/* ----------------------------------------------------------
+   4) DICE ANIMATIONS (slide + shake)
+   ----------------------------------------------------------
+   - slideLeft/right: entrance motion + fade
+   - shake: a quick jitter after the slide finishes
+*/
+@keyframes shake {
+  0%   { transform: translate(1px, 1px) rotate(0deg); }
+  10%  { transform: translate(-1px, -2px) rotate(-1deg); }
+  20%  { transform: translate(-3px, 0px) rotate(1deg); }
+  30%  { transform: translate(3px, 2px) rotate(0deg); }
+  40%  { transform: translate(1px, -1px) rotate(1deg); }
+  50%  { transform: translate(-1px, 2px) rotate(-1deg); }
+  60%  { transform: translate(-3px, 1px) rotate(0deg); }
+  70%  { transform: translate(3px, 1px) rotate(-1deg); }
+  80%  { transform: translate(-1px, -1px) rotate(1deg); }
+  90%  { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* slide in from the left to emulate dice thrown */
+@keyframes slideLeft {
+  0%   { transform: translateX(-100px); opacity: 0; }
+  100% { transform: translateX(0);      opacity: 1; }
+}
+
+
+/* Combined animations:
+   - The slide runs first (1s), then the shake starts at 1s.
+   - Keep timings similar for both dice so it feels cohesive.
+*/
+.animate-left {
+  animation: slideLeft 1s ease, shake 1s ease 0.5s;
+}
+
+
+
+/* ----------------------------------------------------------
+   5) GLASSY "ROLL" BUTTON
+   ----------------------------------------------------------
+   - Uses layered elements to create a neon-glow edge and soft shadow.
+   - Keeps strong focus outline for keyboard users (accessibility).
+*/
+.roll-btn {
+  position: relative;
+  isolation: isolate;                        /* ensures pseudo/child layers don’t leak stacking contexts */
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;                      /* full pill shape */
+  border: 1px solid rgba(255,255,255,.35);
+  background: radial-gradient(120% 120% at 50% 0%,
+              rgba(255,255,255,.25) 0%, rgba(255,255,255,.08) 60%, rgba(255,255,255,.04) 100%);
+  backdrop-filter: blur(8px);                /* the "frosted glass" look (Safari needs the prefixed version too) */
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: .5px;
+  color: #0b0b0b;
+  transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+  outline: none;                             /* we’ll supply a custom focus style below */
+}
+
+/* Glowing edge behind the button */
+.roll-btn .btn-glow {
+  position: absolute;
+  inset: -2px;                               /* expand slightly beyond the button edges */
+  z-index: -1;                               /* sit behind the button face */
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    #26d4eb, #bbdb5b, #f02323, #a5a5a4, #26d4eb
+  );
+  filter: blur(10px);                        /* diffuse the glow */
+  opacity: .45;
+  transition: opacity .2s ease;
+}
+
+/* Soft drop shadow layer behind everything */
+.roll-btn .btn-shadow {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+
+/* Hover: a little lift + brighter glow */
+.roll-btn:hover .btn-glow { opacity: .75; }
+.roll-btn:hover { transform: translateY(-1px); }
+
+/* Active (pressed): subtle pressed-in look */
+.roll-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35) inset;
+}
+
+/* Keyboard focus: strong visible ring (accessibility win) */
+.roll-btn:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,.7),
+    0 0 0 6px rgba(38,212,235,.6);
+}
+
+/* Small hint text under the button */
+.hint { font-size: 0.9rem; opacity: .8; }
+
+
+/* ----------------------------------------------------------
+   6) REDUCED MOTION SUPPORT
+   ----------------------------------------------------------
+   Respect users who prefer less motion (OS accessibility setting).
+   We essentially turn off animations/transitions.
+*/
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
